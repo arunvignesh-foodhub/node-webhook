@@ -24,10 +24,10 @@ const stripe = Stripe('sk_test_51M1UhkKUlMLCn1xU0f5iNBRT2eMHHZdpmShyLHVHKiFg291X
 const endpointSecret = 'we_1M4iSNKUlMLCn1xUmasd998c';
 
 app.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, response) => {
+    console.log('called webhook')
     const sig = request.headers['stripe-signature'];
 
     let event;
-
     // Verify webhook signature and extract the event.
     // See https://stripe.com/docs/webhooks/signatures for more information.
     try {
@@ -35,6 +35,7 @@ app.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, respo
     } catch (err) {
         return response.status(400).send(`Webhook Error: ${err.message}`);
     }
+    console.log('obtained event',event);
 
     if (event.type === 'payment_intent.succeeded') {
         const paymentIntent = event.data.object;

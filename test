@@ -1,0 +1,15 @@
+// Set your secret key. Remember to switch to your live secret key in production.
+// See your keys here: https://dashboard.stripe.com/apikeys
+let test = async() => {
+    const stripe = require('stripe')('sk_test_51M1UhkKUlMLCn1xU0f5iNBRT2eMHHZdpmShyLHVHKiFg291XqMkKOV6zGNjalCpoc96wpV84cv12CukMTz8kuHxo00bpMWFXef');
+
+    const endpoint = await stripe.webhookEndpoints.create({
+        url: 'https://webhook-07071997.herokuapp.com/',
+        enabled_events: [
+            'charge.failed',
+            'charge.succeeded',
+        ],
+    });
+    console.log('endpoint', endpoint);
+}
+test()
