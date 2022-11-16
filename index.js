@@ -21,7 +21,7 @@ const stripe = Stripe('sk_test_51M1UhkKUlMLCn1xU0f5iNBRT2eMHHZdpmShyLHVHKiFg291X
 // If you are testing your webhook locally with the Stripe CLI you
 // can find the endpoint's secret by running `stripe listen`
 // Otherwise, find your endpoint's secret in your webhook settings in the Developer Dashboard
-const endpointSecret = 'whsec_...';
+const endpointSecret = 'we_1M4iSNKUlMLCn1xUmasd998c';
 
 app.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, response) => {
     const sig = request.headers['stripe-signature'];
