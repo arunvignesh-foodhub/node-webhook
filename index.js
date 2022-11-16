@@ -1,49 +1,54 @@
-// server.js
-//
-// Use this sample code to handle webhook events in your integration.
-//
-// 1) Paste this code into a new file (server.js)
-//
-// 2) Install dependencies
-//   npm install stripe
-//   npm install express
-//
-// 3) Run the server on http://localhost:4242
-//   node server.js
-
-const stripe = require('stripe');
+// Using Express
 const express = require('express');
+const bodyParser = require("body-parser");
 const app = express();
+app.use(express.json());
 
-// This is your Stripe CLI webhook secret for testing your endpoint locally.
-const endpointSecret = "whsec_13bb775fe6157da38a73a72b546e2c269641fe12ab84f28681ff99bbf6a2a750";
+// Use JSON parser for all non-webhook routes
+app.use((req, res, next) => {
+    if (req.originalUrl === "/webhook") {
+        next();
+    } else {
+        bodyParser.json()(req, res, next);
+    }
+});
 
-app.post('/webhook', express.raw({type: 'application/json'}), (request, response) => {
+// Set your secret key. Remember to switch to your live secret key in production!
+// See your keys here: https://dashboard.stripe.com/apikeys
+const Stripe = require('stripe');
+const stripe = Stripe('sk_test_51M1UhkKUlMLCn1xU0f5iNBRT2eMHHZdpmShyLHVHKiFg291XqMkKOV6zGNjalCpoc96wpV84cv12CukMTz8kuHxo00bpMWFXef');
+
+// If you are testing your webhook locally with the Stripe CLI you
+// can find the endpoint's secret by running `stripe listen`
+// Otherwise, find your endpoint's secret in your webhook settings in the Developer Dashboard
+const endpointSecret = 'whsec_...';
+
+app.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, response) => {
     const sig = request.headers['stripe-signature'];
 
     let event;
 
+    // Verify webhook signature and extract the event.
+    // See https://stripe.com/docs/webhooks/signatures for more information.
     try {
         event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
     } catch (err) {
-        response.status(400).send(`Webhook Error: ${err.message}`);
-        return;
+        return response.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-    // Handle the event
-    switch (event.type) {
-        case 'payment_intent.succeeded':
-            const paymentIntent = event.data.object;
-            console.log('obtained payment intent');
-            // Then define and call a function to handle the event payment_intent.succeeded
-            break;
-        // ... handle other event types
-        default:
-            console.log(`Unhandled event type ${event.type}`);
+    if (event.type === 'payment_intent.succeeded') {
+        const paymentIntent = event.data.object;
+        const connectedAccountId = event.account;
+        handleSuccessfulPaymentIntent(connectedAccountId, paymentIntent);
     }
 
-    // Return a 200 response to acknowledge receipt of the event
-    response.send();
+    response.json({received: true});
 });
 
-app.listen(4242, () => console.log('Running on port 4242'));
+const handleSuccessfulPaymentIntent = (connectedAccountId, paymentIntent) => {
+    // Fulfill the purchase.
+    console.log('Connected account ID: ' + connectedAccountId);
+    console.log(JSON.stringify(paymentIntent));
+}
+
+app.listen(4242, () => console.log(`Node server listening on port ${4242}!`));
