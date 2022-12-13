@@ -34,42 +34,42 @@ app.post('/webhook', express.raw({type: 'application/json'}), (request, response
     switch (event.type) {
         case 'payment_intent.amount_capturable_updated':
             const paymentIntent = event.data.object;
-            console.log('paymentIntent1', paymentIntent)
+            console.log('payment_intent.amount_capturable_updated', paymentIntent)
             // Then define and call a function to handle the event payment_intent.amount_capturable_updated
             break;
         case 'payment_intent.canceled':
             const paymentIntent1 = event.data.object;
-            console.log('paymentIntent1', paymentIntent1)
+            console.log('payment_intent.canceled', paymentIntent1)
             // Then define and call a function to handle the event payment_intent.canceled
             break;
         case 'payment_intent.created':
             const paymentIntent2 = event.data.object;
-            console.log('paymentIntent2', paymentIntent2)
+            console.log('payment_intent.created', paymentIntent2)
             // Then define and call a function to handle the event payment_intent.created
             break;
         case 'payment_intent.partially_funded':
             const paymentIntent3 = event.data.object;
-            console.log('paymentIntent3', paymentIntent3)
+            console.log('payment_intent.partially_funded', paymentIntent3)
             // Then define and call a function to handle the event payment_intent.partially_funded
             break;
         case 'payment_intent.payment_failed':
             const paymentIntent4 = event.data.object;
-            console.log('paymentIntent4', paymentIntent4)
+            console.log('payment_intent.payment_failed', paymentIntent4)
             // Then define and call a function to handle the event payment_intent.payment_failed
             break;
         case 'payment_intent.processing':
             const paymentIntent5 = event.data.object;
-            console.log('paymentIntent5', paymentIntent5)
+            console.log('payment_intent.processing', paymentIntent5)
             // Then define and call a function to handle the event payment_intent.processing
             break;
         case 'payment_intent.requires_action':
             const paymentIntent6 = event.data.object;
-            console.log('paymentIntent6', paymentIntent6)
+            console.log('payment_intent.requires_action', paymentIntent6)
             // Then define and call a function to handle the event payment_intent.requires_action
             break;
         case 'payment_intent.succeeded':
             const paymentIntent7 = event.data.object;
-            console.log('paymentIntent7', paymentIntent7)
+            console.log('payment_intent.succeeded', paymentIntent7)
             // Then define and call a function to handle the event payment_intent.succeeded
             break;
         // ... handle other event types
